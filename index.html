@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A curated collection of AI prompts for various use cases"
+    />
+    <title>Prompt Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-primary: #0a0a0a;
+        --bg-card: #1a1a1a;
+        --accent: #ff6b35;
+        --accent-glow: rgba(255, 107, 53, 0.3);
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a2a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'IBM Plex Mono', monospace;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 30%,
+            var(--accent-glow) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(59, 130, 246, 0.2) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      header {
+        margin-bottom: 4rem;
+        text-align: center;
+        animation: fadeInDown 0.8s ease-out;
+      }
+
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 900;
+        background: linear-gradient(135deg, var(--accent) 0%, #ff8c61 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .prompts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .prompt-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.6s ease-out backwards;
+        overflow: hidden;
+      }
+
+      .prompt-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), transparent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+      }
+
+      .prompt-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .prompt-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
+      }
+
+      .prompt-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .prompt-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .prompt-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .prompt-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .prompt-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+      .prompt-card:nth-child(6) {
+        animation-delay: 0.6s;
+      }
+
+      .prompt-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        line-height: 1.3;
+      }
+
+      .prompt-text {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        max-height: 150px;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+      }
+
+      .prompt-text p {
+        margin-bottom: 0.8rem;
+      }
+
+      .prompt-text p:last-child {
+        margin-bottom: 0;
+      }
+
+      .prompt-text ul,
+      .prompt-text ol {
+        margin-left: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .prompt-text li {
+        margin-bottom: 0.4rem;
+      }
+
+      .prompt-text strong {
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .prompt-text::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .prompt-text::-webkit-scrollbar-track {
+        background: var(--border);
+        border-radius: 2px;
+      }
+
+      .prompt-text::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      .copy-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .copy-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .copy-btn:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      .copy-btn:hover {
+        background: #ff5722;
+        transform: scale(1.02);
+        box-shadow: 0 4px 20px var(--accent-glow);
+      }
+
+      .copy-btn:active {
+        transform: scale(0.98);
+      }
+
+      .copy-btn.copied {
+        background: #4caf50;
+      }
+
+      .copy-btn span {
+        position: relative;
+        z-index: 1;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .prompts-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .container {
+          padding: 2rem 1rem;
+        }
+
+        header {
+          margin-bottom: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Prompt Library</h1>
+        <p class="subtitle">Curated AI Prompts Collection</p>
+      </header>
+
+      <div class="prompts-grid">
+        <div class="prompt-card">
+          <h2 class="prompt-title">Creative Story Writer</h2>
+          <div class="prompt-text">
+            <p>
+              A high-octane, seamless cinematic transition. The subject in the
+              first frame violently shatters into a vortex of ink-black feathers
+              with extreme directional motion blur. This cloud instantly erupts
+              into a massive swarm of ravens that lunge aggressively at the
+              camera lens.
+            </p>
+            <p>
+              Camera Movement: A sudden, violent dolly-in (crash-zoom) that
+              synchronizes with the swarm, creating a heavy radial motion blur
+              effect. The screen becomes 100% obscured by a chaotic, blurry
+              'wipe' of black wings for a split second.
+            </p>
+            <p>
+              The Reveal: As the camera 'pulls back' or the blur clears, the
+              ravens disperse centrifugally to perfectly reveal the subject in
+              the second frame. High-speed shutter sync, heavy motion streaking,
+              cinematic lighting, 4K. SFX: A deep, distorted cinematic 'whoosh'
+              impact followed by chaotic wing-flapping and a sharp bass drop."
+            </p>
+          </div>
+
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span>Copy Prompt</span>
+          </button>
+        </div>
+
+        <div class="prompt-card">
+          <h2 class="prompt-title">Code Debugger</h2>
+          <div class="prompt-text">
+            <p>Analyze the following code and identify any issues:</p>
+            <p><strong>Please check for:</strong></p>
+            <ul>
+              <li>Syntax errors and bugs</li>
+              <li>Performance bottlenecks</li>
+              <li>Security vulnerabilities</li>
+              <li>Code style and best practices</li>
+            </ul>
+            <p>
+              Provide detailed explanations and optimized solutions with code
+              examples.
+            </p>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span>Copy Prompt</span>
+          </button>
+        </div>
+
+        <div class="prompt-card">
+          <h2 class="prompt-title">Marketing Copy Expert</h2>
+          <div class="prompt-text">
+            <p>
+              Create compelling marketing copy for a new eco-friendly product
+              launch.
+            </p>
+            <p>The copy should include:</p>
+            <ol>
+              <li>A catchy, memorable headline</li>
+              <li>Persuasive body text highlighting key benefits</li>
+              <li>Social proof or statistics if applicable</li>
+              <li>A strong call-to-action</li>
+            </ol>
+            <p>
+              <strong>Target audience:</strong> Environmentally conscious
+              millennials aged 25-35.
+            </p>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span>Copy Prompt</span>
+          </button>
+        </div>
+
+        <div class="prompt-card">
+          <h2 class="prompt-title">Research Summarizer</h2>
+          <div class="prompt-text">
+            <p>
+              Summarize the key findings from recent research papers on
+              artificial intelligence ethics.
+            </p>
+            <p>Focus on:</p>
+            <ul>
+              <li>Main arguments and conclusions</li>
+              <li>Methodologies used in the studies</li>
+              <li>Practical implications for AI development</li>
+              <li>Areas of consensus and disagreement</li>
+            </ul>
+            <p>
+              Present the information in a clear, structured format suitable for
+              non-technical stakeholders.
+            </p>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span>Copy Prompt</span>
+          </button>
+        </div>
+
+        <div class="prompt-card">
+          <h2 class="prompt-title">Interview Coach</h2>
+          <div class="prompt-text">
+            <p>
+              Act as an interview coach and help me prepare for a senior
+              software engineer position.
+            </p>
+            <p>Please provide:</p>
+            <ul>
+              <li>Common technical interview questions</li>
+              <li>Behavioral questions (STAR method)</li>
+              <li>Tips for answering effectively</li>
+              <li>Advice on showcasing my skills</li>
+              <li>Questions I should ask the interviewer</li>
+            </ul>
+            <p>Tailor the advice to senior-level expectations.</p>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span>Copy Prompt</span>
+          </button>
+        </div>
+
+        <div class="prompt-card">
+          <h2 class="prompt-title">Meal Planner</h2>
+          <div class="prompt-text">
+            <p>Create a healthy, balanced meal plan for one week.</p>
+            <p><strong>Requirements:</strong></p>
+            <ul>
+              <li>Include breakfast, lunch, dinner, and 2 snacks daily</li>
+              <li>Dietary preferences: vegetarian, high-protein, low-carb</li>
+              <li>Variety in ingredients and cuisines</li>
+              <li>Estimated prep time for each meal</li>
+            </ul>
+            <p>
+              Also provide a comprehensive shopping list organized by category
+              (produce, dairy, pantry items, etc.).
+            </p>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span>Copy Prompt</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function copyPrompt(button) {
+        const card = button.closest('.prompt-card')
+        const promptElement = card.querySelector('.prompt-text')
+
+        // Get the HTML content
+        const htmlContent = promptElement.innerHTML
+
+        // Convert HTML to plain text with formatting preserved
+        const tempDiv = document.createElement('div')
+        tempDiv.innerHTML = htmlContent
+
+        // Convert HTML to formatted plain text
+        let formattedText = ''
+        tempDiv.childNodes.forEach((node) => {
+          if (node.nodeName === 'P') {
+            formattedText += node.textContent + '\n\n'
+          } else if (node.nodeName === 'UL' || node.nodeName === 'OL') {
+            const items = node.querySelectorAll('li')
+            items.forEach((li, index) => {
+              const bullet = node.nodeName === 'UL' ? '• ' : `${index + 1}. `
+              formattedText += bullet + li.textContent + '\n'
+            })
+            formattedText += '\n'
+          } else if (node.nodeName === 'BR') {
+            formattedText += '\n'
+          } else if (node.nodeType === Node.TEXT_NODE) {
+            formattedText += node.textContent
+          }
+        })
+
+        // Clean up extra whitespace at the end
+        formattedText = formattedText.trim()
+
+        // Copy both plain text and HTML to clipboard
+        const clipboardItem = new ClipboardItem({
+          'text/plain': new Blob([formattedText], { type: 'text/plain' }),
+          'text/html': new Blob([htmlContent], { type: 'text/html' }),
+        })
+
+        navigator.clipboard
+          .write([clipboardItem])
+          .then(() => {
+            const originalText = button.innerHTML
+            button.innerHTML = '<span>✓ Copied!</span>'
+            button.classList.add('copied')
+
+            setTimeout(() => {
+              button.innerHTML = originalText
+              button.classList.remove('copied')
+            }, 2000)
+          })
+          .catch((err) => {
+            // Fallback to plain text only if ClipboardItem is not supported
+            navigator.clipboard
+              .writeText(formattedText)
+              .then(() => {
+                const originalText = button.innerHTML
+                button.innerHTML = '<span>✓ Copied!</span>'
+                button.classList.add('copied')
+
+                setTimeout(() => {
+                  button.innerHTML = originalText
+                  button.classList.remove('copied')
+                }, 2000)
+              })
+              .catch((err) => {
+                console.error('Failed to copy:', err)
+                button.innerHTML = '<span>Error copying</span>'
+              })
+          })
+      }
+    </script>
+  </body>
+</html>
